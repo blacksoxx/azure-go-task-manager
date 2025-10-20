@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  template:
+    spec:
+      containers:
+      - name: user-service
+        resources:
+          requests:
+            memory: "128Mi"    # ⬆️ More memory for user data processing
+            cpu: "100m"
+          limits:
+            memory: "256Mi"    # ⬆️ Higher limits for user service
+            cpu: "200m"

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-config
+data:
+  POSTGRES_HOST: "psql-taskmanager-staging.postgres.database.azure.com"  # ✅ Staging DB
+  POSTGRES_DB: "taskmanager_staging"  # ✅ Staging DB name
+  POSTGRES_SSL_MODE: "disable" #Not using SSL in staging for easier debugging

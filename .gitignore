@@ -1,0 +1,32 @@
+
+*/bin/
+*.tar.gz
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.terraform.lock.hcl
+terraform.tfvars
+*.tfvars.json
+.kube/# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+terraform.tfvars
+**/.terraform/*
+*.backup
+
+# Secrets
+*secret*.yaml
+.env
+
+# Binaries
+bin/
+*.exe
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store

@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- service.yaml
+
+commonLabels:
+  app: api-gateway
+  version: v1
+
+images:
+- name: api-gateway
+  newName: acrtaskmanagerdev.azurecr.io/api-gateway
+  newTag: latest

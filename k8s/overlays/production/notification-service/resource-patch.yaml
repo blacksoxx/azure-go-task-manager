@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+spec:
+  template:
+    spec:
+      containers:
+      - name: notification-service
+        resources:
+          requests:
+            memory: "128Mi"    # ⬆️ More memory for notification processing
+            cpu: "100m"
+          limits:
+            memory: "256Mi"    # ⬆️ Higher limits for notification service
+            cpu: "200m"

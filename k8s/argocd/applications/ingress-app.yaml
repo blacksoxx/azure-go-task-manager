@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress
+  namespace: argocd
+  labels:
+    app: ingress
+    environment: production
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/blacksoxx/azure-go-task-manager.git
+    targetRevision: main
+    path: k8s/overlays/production/ingress
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: production
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

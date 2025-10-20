@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  api-gateway:
+      build: ./api-gateway
+      container_name: taskmanager-api-gateway
+      ports:
+        - "8080:8080"
+      environment:
+        - USER_SERVICE_URL=http://user-service:8081
+        - AUTH_SERVICE_URL=http://auth-service:8084
+        - TASK_SERVICE_URL=http://task-service:8082
+        - NOTIFICATION_SERVICE_URL=http://notification-service:8083
+        - JWT_SECRET=your_jwt_secret_key
+      depends_on:
+        - user-service
+        - auth-service
+        - task-service
+        - notification-service
+      networks:
+        - taskmanager-network
+      restart: unless-stopped
+  postgres:
+    image: postgres:15
+    container_name: taskmanager-postgres
+    environment:
+      POSTGRES_DB: taskmanager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - taskmanager-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-service:
+    build: ./user-service
+    container_name: taskmanager-user-service
+    ports:
+      - "8081:8081"
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/taskmanager?sslmode=disable
+      - JWT_SECRET=your_jwt_secret_key
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - taskmanager-network
+    restart: unless-stopped
+
+  auth-service:
+    build: ./auth-service
+    container_name: taskmanager-auth-service
+    ports:
+      - "8084:8084"
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/taskmanager?sslmode=disable
+      - JWT_SECRET=your_jwt_secret_key
+    depends_on:
+      - postgres
+      - user-service
+    networks:
+      - taskmanager-network
+    restart: unless-stopped
+
+  task-service:
+    build: ./task-service
+    container_name: taskmanager-task-service
+    ports:
+      - "8082:8082"
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/taskmanager?sslmode=disable
+      - JWT_SECRET=your_jwt_secret_key
+    depends_on:
+      - postgres
+      - user-service
+    networks:
+      - taskmanager-network
+    restart: unless-stopped
+
+  notification-service:
+    build: ./notification-service
+    container_name: taskmanager-notification-service
+    ports:
+      - "8083:8083"
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/taskmanager?sslmode=disable
+      - JWT_SECRET=your_jwt_secret_key
+    depends_on:
+      - postgres
+      - user-service
+    networks:
+      - taskmanager-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  taskmanager-network:
+    driver: bridge
