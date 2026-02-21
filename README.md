@@ -50,7 +50,7 @@ This project implements a microservices-based task management system with the fo
 │       └── production/
 ├── terraform-aws/               # Infrastructure as Code in AWS
 │   ├── modules/            # Terraform modules (ECR, EKS, PostgreSQL)
-├── terraformazure/               # Infrastructure as Code on Azure
+├── terraform-azure/               # Infrastructure as Code on Azure
 │   ├── modules/            # Terraform modules (ACR, AKS, PostgreSQL)
 ├── classic/                # Classic Kubernetes manifests
 └── scripts/               # Deployment utility scripts
@@ -236,6 +236,7 @@ Utility scripts are provided in the `scripts/` directory:
 
 - `scripts/deploy/deploy-k8s.sh`: Deploy to Kubernetes (Classic way, not recommended)
 - `scripts/deploy/image-push.sh`: Build and push images to ACR registry
+
 
 
 
